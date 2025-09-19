@@ -4,5 +4,8 @@ builder = "nixpacks"
 [build.nixpacksConfig]
 packageManager = "npm"
 
+[build.nixpacksConfig.npmConfigArgs]
+"--legacy-peer-deps" = true
+
 [deploy]
 startCommand = "npm start"
