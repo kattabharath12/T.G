@@ -1,5 +1,3 @@
-
-
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
@@ -75,13 +73,13 @@ export async function GET(request: NextRequest) {
           description: "W-2 Box 1: Wages, tips, other compensation (PRIMARY INCOME FIELD)",
           boxReferences: ["W-2 Box 1"],
           sources: extractedTaxData.breakdown.byDocument
-            .filter(doc => doc.contributedAmounts?.wages && doc.contributedAmounts.wages > 0)
-            .map(doc => ({
+            .filter((doc: any) => doc.contributedAmounts?.wages && doc.contributedAmounts.wages > 0)
+            .map((doc: any) => ({
               document: doc.fileName,
               documentType: doc.documentType,
               confidence: doc.confidence,
               contribution: doc.contributedAmounts.wages || 0,
-              extractedFields: doc.sources.filter(s => s.mappedTo === 'wages')
+              extractedFields: doc.sources.filter((s: any) => s.mappedTo === 'wages')
             }))
         },
         interest: {
@@ -90,13 +88,13 @@ export async function GET(request: NextRequest) {
           boxReferences: ["1099-INT Box 1", "1099-INT Box 3", "1099-INT Box 8", "1099-INT Box 9"],
           excludes: ["Box 2 (Early withdrawal penalty)", "Box 4 (Federal tax withheld)", "Box 5 (Investment expenses)", "Box 6 (Foreign tax paid)"],
           sources: extractedTaxData.breakdown.byDocument
-            .filter(doc => doc.contributedAmounts?.interest && doc.contributedAmounts.interest > 0)
-            .map(doc => ({
+            .filter((doc: any) => doc.contributedAmounts?.interest && doc.contributedAmounts.interest > 0)
+            .map((doc: any) => ({
               document: doc.fileName,
               documentType: doc.documentType,
               confidence: doc.confidence,
               contribution: doc.contributedAmounts.interest || 0,
-              extractedFields: doc.sources.filter(s => s.mappedTo === 'interest')
+              extractedFields: doc.sources.filter((s: any) => s.mappedTo === 'interest')
             }))
         },
         dividends: {
@@ -105,13 +103,13 @@ export async function GET(request: NextRequest) {
           boxReferences: ["1099-DIV Box 1a", "1099-DIV Box 2a", "1099-DIV Box 3", "1099-DIV Box 5", "1099-DIV Box 8-10"],
           excludes: ["Box 1b (Qualified dividends - subset of 1a)", "Box 4 (Federal tax withheld)", "Box 6 (Investment expenses)", "Box 7 (Foreign tax paid)"],
           sources: extractedTaxData.breakdown.byDocument
-            .filter(doc => doc.contributedAmounts?.dividends && doc.contributedAmounts.dividends > 0)
-            .map(doc => ({
+            .filter((doc: any) => doc.contributedAmounts?.dividends && doc.contributedAmounts.dividends > 0)
+            .map((doc: any) => ({
               document: doc.fileName,
               documentType: doc.documentType,
               confidence: doc.confidence,
               contribution: doc.contributedAmounts.dividends || 0,
-              extractedFields: doc.sources.filter(s => s.mappedTo === 'dividends')
+              extractedFields: doc.sources.filter((s: any) => s.mappedTo === 'dividends')
             }))
         },
         nonEmployeeCompensation: {
@@ -120,13 +118,13 @@ export async function GET(request: NextRequest) {
           boxReferences: ["1099-NEC Box 1"],
           excludes: ["Box 4 (Federal tax withheld)"],
           sources: extractedTaxData.breakdown.byDocument
-            .filter(doc => doc.contributedAmounts?.nonEmployeeComp && doc.contributedAmounts.nonEmployeeComp > 0)
-            .map(doc => ({
+            .filter((doc: any) => doc.contributedAmounts?.nonEmployeeComp && doc.contributedAmounts.nonEmployeeComp > 0)
+            .map((doc: any) => ({
               document: doc.fileName,
               documentType: doc.documentType,
               confidence: doc.confidence,
               contribution: doc.contributedAmounts.nonEmployeeComp || 0,
-              extractedFields: doc.sources.filter(s => s.mappedTo === 'nonEmployeeCompensation')
+              extractedFields: doc.sources.filter((s: any) => s.mappedTo === 'nonEmployeeCompensation')
             }))
         },
         miscellaneousIncome: {
@@ -135,13 +133,13 @@ export async function GET(request: NextRequest) {
           boxReferences: ["1099-MISC Box 1", "1099-MISC Box 2", "1099-MISC Box 3", "1099-MISC Box 5", "1099-MISC Box 6", "1099-MISC Box 8-12"],
           excludes: ["Box 4 (Federal tax withheld)"],
           sources: extractedTaxData.breakdown.byDocument
-            .filter(doc => doc.contributedAmounts?.miscIncome && doc.contributedAmounts.miscIncome > 0)
-            .map(doc => ({
+            .filter((doc: any) => doc.contributedAmounts?.miscIncome && doc.contributedAmounts.miscIncome > 0)
+            .map((doc: any) => ({
               document: doc.fileName,
               documentType: doc.documentType,
               confidence: doc.confidence,
               contribution: doc.contributedAmounts.miscIncome || 0,
-              extractedFields: doc.sources.filter(s => s.mappedTo === 'miscellaneousIncome')
+              extractedFields: doc.sources.filter((s: any) => s.mappedTo === 'miscellaneousIncome')
             }))
         },
         otherIncome: {
@@ -149,13 +147,13 @@ export async function GET(request: NextRequest) {
           description: "Other qualifying taxable income from various sources",
           boxReferences: ["Various"],
           sources: extractedTaxData.breakdown.byDocument
-            .filter(doc => doc.contributedAmounts?.other && doc.contributedAmounts.other > 0)
-            .map(doc => ({
+            .filter((doc: any) => doc.contributedAmounts?.other && doc.contributedAmounts.other > 0)
+            .map((doc: any) => ({
               document: doc.fileName,
               documentType: doc.documentType,
               confidence: doc.confidence,
               contribution: doc.contributedAmounts.other || 0,
-              extractedFields: doc.sources.filter(s => s.mappedTo === 'other')
+              extractedFields: doc.sources.filter((s: any) => s.mappedTo === 'other')
             }))
         }
       },
@@ -167,8 +165,8 @@ export async function GET(request: NextRequest) {
           sources: ["W-2 Box 2", "1099-INT Box 4", "1099-DIV Box 4", "1099-NEC Box 4", "1099-MISC Box 4"],
           total: extractedTaxData.withholdings.federalTax,
           documentBreakdown: extractedTaxData.breakdown.byDocument
-            .map(doc => {
-              const federalWithholdingFields = doc.sources.filter(source => {
+            .map((doc: any) => {
+              const federalWithholdingFields = doc.sources.filter((source: any) => {
                 // Extract federal withholding fields from each document
                 const fieldNameLower = source.fieldName.toLowerCase();
                 const isFederalWithholding = (
@@ -192,8 +190,8 @@ export async function GET(request: NextRequest) {
                 document: doc.fileName,
                 documentType: doc.documentType.replace('FORM_', '').replace('_', '-'),
                 confidence: Math.round(doc.confidence * 100),
-                totalContribution: federalWithholdingFields.reduce((sum, field) => sum + field.amount, 0),
-                extractedFields: federalWithholdingFields.map(field => ({
+                totalContribution: federalWithholdingFields.reduce((sum: number, field: any) => sum + field.amount, 0),
+                extractedFields: federalWithholdingFields.map((field: any) => ({
                   fieldName: field.fieldName,
                   amount: field.amount,
                   confidence: Math.round(field.confidence * 100),
@@ -203,7 +201,7 @@ export async function GET(request: NextRequest) {
                 }))
               };
             })
-            .filter(item => item !== null)
+            .filter((item: any) => item !== null)
         },
         stateTax: {
           amount: extractedTaxData.withholdings.stateTax,
@@ -211,8 +209,8 @@ export async function GET(request: NextRequest) {
           sources: ["W-2 State boxes", "1099 State withholding boxes"],
           total: extractedTaxData.withholdings.stateTax,
           documentBreakdown: extractedTaxData.breakdown.byDocument
-            .map(doc => {
-              const stateWithholdingFields = doc.sources.filter(source => {
+            .map((doc: any) => {
+              const stateWithholdingFields = doc.sources.filter((source: any) => {
                 const fieldNameLower = source.fieldName.toLowerCase();
                 const isStateWithholding = (
                   fieldNameLower.includes('stateincometax') ||
@@ -230,8 +228,8 @@ export async function GET(request: NextRequest) {
                 document: doc.fileName,
                 documentType: doc.documentType.replace('FORM_', '').replace('_', '-'),
                 confidence: Math.round(doc.confidence * 100),
-                totalContribution: stateWithholdingFields.reduce((sum, field) => sum + field.amount, 0),
-                extractedFields: stateWithholdingFields.map(field => ({
+                totalContribution: stateWithholdingFields.reduce((sum: number, field: any) => sum + field.amount, 0),
+                extractedFields: stateWithholdingFields.map((field: any) => ({
                   fieldName: field.fieldName,
                   amount: field.amount,
                   confidence: Math.round(field.confidence * 100),
@@ -241,7 +239,7 @@ export async function GET(request: NextRequest) {
                 }))
               };
             })
-            .filter(item => item !== null)
+            .filter((item: any) => item !== null)
         },
         socialSecurityTax: {
           amount: extractedTaxData.withholdings.socialSecurityTax,
@@ -249,8 +247,8 @@ export async function GET(request: NextRequest) {
           sources: ["W-2 Box 4"],
           total: extractedTaxData.withholdings.socialSecurityTax,
           documentBreakdown: extractedTaxData.breakdown.byDocument
-            .map(doc => {
-              const socialSecurityFields = doc.sources.filter(source => {
+            .map((doc: any) => {
+              const socialSecurityFields = doc.sources.filter((source: any) => {
                 const fieldNameLower = source.fieldName.toLowerCase();
                 const isSocialSecurityWithholding = (
                   fieldNameLower.includes('socialsecuritytaxwithheld') ||
@@ -266,8 +264,8 @@ export async function GET(request: NextRequest) {
                 document: doc.fileName,
                 documentType: doc.documentType.replace('FORM_', '').replace('_', '-'),
                 confidence: Math.round(doc.confidence * 100),
-                totalContribution: socialSecurityFields.reduce((sum, field) => sum + field.amount, 0),
-                extractedFields: socialSecurityFields.map(field => ({
+                totalContribution: socialSecurityFields.reduce((sum: number, field: any) => sum + field.amount, 0),
+                extractedFields: socialSecurityFields.map((field: any) => ({
                   fieldName: field.fieldName,
                   amount: field.amount,
                   confidence: Math.round(field.confidence * 100),
@@ -277,7 +275,7 @@ export async function GET(request: NextRequest) {
                 }))
               };
             })
-            .filter(item => item !== null)
+            .filter((item: any) => item !== null)
         },
         medicareTax: {
           amount: extractedTaxData.withholdings.medicareTax,
@@ -285,8 +283,8 @@ export async function GET(request: NextRequest) {
           sources: ["W-2 Box 6"],
           total: extractedTaxData.withholdings.medicareTax,
           documentBreakdown: extractedTaxData.breakdown.byDocument
-            .map(doc => {
-              const medicareFields = doc.sources.filter(source => {
+            .map((doc: any) => {
+              const medicareFields = doc.sources.filter((source: any) => {
                 const fieldNameLower = source.fieldName.toLowerCase();
                 const isMedicareWithholding = (
                   fieldNameLower.includes('medicaretaxwithheld') ||
@@ -302,8 +300,8 @@ export async function GET(request: NextRequest) {
                 document: doc.fileName,
                 documentType: doc.documentType.replace('FORM_', '').replace('_', '-'),
                 confidence: Math.round(doc.confidence * 100),
-                totalContribution: medicareFields.reduce((sum, field) => sum + field.amount, 0),
-                extractedFields: medicareFields.map(field => ({
+                totalContribution: medicareFields.reduce((sum: number, field: any) => sum + field.amount, 0),
+                extractedFields: medicareFields.map((field: any) => ({
                   fieldName: field.fieldName,
                   amount: field.amount,
                   confidence: Math.round(field.confidence * 100),
@@ -313,7 +311,7 @@ export async function GET(request: NextRequest) {
                 }))
               };
             })
-            .filter(item => item !== null)
+            .filter((item: any) => item !== null)
         },
         totalWithholdings: extractedTaxData.withholdings.federalTax + extractedTaxData.withholdings.stateTax + extractedTaxData.withholdings.socialSecurityTax + extractedTaxData.withholdings.medicareTax,
         // Enhanced calculation steps for withholdings
@@ -321,36 +319,36 @@ export async function GET(request: NextRequest) {
           `💸 DETAILED TAX WITHHOLDINGS CALCULATION:`,
           ``,
           `📋 FEDERAL INCOME TAX WITHHELD:`,
-          ...extractedTaxData.breakdown.byDocument.flatMap(doc => {
-            const federalFields = doc.sources.filter(s => s.fieldName.toLowerCase().includes('federal') && s.fieldName.toLowerCase().includes('withheld'));
-            return federalFields.map(field => 
+          ...extractedTaxData.breakdown.byDocument.flatMap((doc: any) => {
+            const federalFields = doc.sources.filter((s: any) => s.fieldName.toLowerCase().includes('federal') && s.fieldName.toLowerCase().includes('withheld'));
+            return federalFields.map((field: any) => 
               `   ${doc.documentType} (${doc.fileName}): ${field.box || 'Unknown Box'} = +$${field.amount.toLocaleString()} (${Math.round(field.confidence * 100)}% confidence)`
             );
           }),
           `   ➤ Federal Tax Withheld Total: $${extractedTaxData.withholdings.federalTax.toLocaleString()}`,
           ``,
           `📋 SOCIAL SECURITY TAX WITHHELD:`,
-          ...extractedTaxData.breakdown.byDocument.flatMap(doc => {
-            const ssFields = doc.sources.filter(s => s.fieldName.toLowerCase().includes('socialsecurity') && s.fieldName.toLowerCase().includes('withheld'));
-            return ssFields.map(field => 
+          ...extractedTaxData.breakdown.byDocument.flatMap((doc: any) => {
+            const ssFields = doc.sources.filter((s: any) => s.fieldName.toLowerCase().includes('socialsecurity') && s.fieldName.toLowerCase().includes('withheld'));
+            return ssFields.map((field: any) => 
               `   ${doc.documentType} (${doc.fileName}): ${field.box || 'Box 4'} = +$${field.amount.toLocaleString()} (${Math.round(field.confidence * 100)}% confidence)`
             );
           }),
           `   ➤ Social Security Tax Total: $${extractedTaxData.withholdings.socialSecurityTax.toLocaleString()}`,
           ``,
           `📋 MEDICARE TAX WITHHELD:`,
-          ...extractedTaxData.breakdown.byDocument.flatMap(doc => {
-            const medicareFields = doc.sources.filter(s => s.fieldName.toLowerCase().includes('medicare') && s.fieldName.toLowerCase().includes('withheld'));
-            return medicareFields.map(field => 
+          ...extractedTaxData.breakdown.byDocument.flatMap((doc: any) => {
+            const medicareFields = doc.sources.filter((s: any) => s.fieldName.toLowerCase().includes('medicare') && s.fieldName.toLowerCase().includes('withheld'));
+            return medicareFields.map((field: any) => 
               `   ${doc.documentType} (${doc.fileName}): ${field.box || 'Box 6'} = +$${field.amount.toLocaleString()} (${Math.round(field.confidence * 100)}% confidence)`
             );
           }),
           `   ➤ Medicare Tax Total: $${extractedTaxData.withholdings.medicareTax.toLocaleString()}`,
           ``,
           `📋 STATE INCOME TAX WITHHELD:`,
-          ...extractedTaxData.breakdown.byDocument.flatMap(doc => {
-            const stateFields = doc.sources.filter(s => s.fieldName.toLowerCase().includes('state') && s.fieldName.toLowerCase().includes('tax'));
-            return stateFields.map(field => 
+          ...extractedTaxData.breakdown.byDocument.flatMap((doc: any) => {
+            const stateFields = doc.sources.filter((s: any) => s.fieldName.toLowerCase().includes('state') && s.fieldName.toLowerCase().includes('tax'));
+            return stateFields.map((field: any) => 
               `   ${doc.documentType} (${doc.fileName}): ${field.box || 'State Box'} = +$${field.amount.toLocaleString()} (${Math.round(field.confidence * 100)}% confidence)`
             );
           }),
@@ -388,12 +386,12 @@ export async function GET(request: NextRequest) {
       ],
       personalInfo: extractedTaxData.personalInfo,
       summary: {
-        documentsProcessed: documents.filter(d => (d.confidence || 0) > 0.1).length,
+        documentsProcessed: documents.filter((d: any) => (d.confidence || 0) > 0.1).length, // ✅ FIXED LINE 391
         totalDocumentsUploaded: documents.length,
         averageConfidence: documents.length > 0 
-          ? (documents.reduce((sum, doc) => sum + (doc.confidence || 0), 0) / documents.length)
+          ? (documents.reduce((sum: number, doc: any) => sum + (doc.confidence || 0), 0) / documents.length)
           : 0,
-        extractedFieldsCount: documents.reduce((sum, doc) => sum + doc.extractedData.length, 0),
+        extractedFieldsCount: documents.reduce((sum: number, doc: any) => sum + doc.extractedData.length, 0),
         validationChecklist: [
           "✅ No withholding amounts included in income totals",
           "✅ All primary income boxes captured per IRS rules",
@@ -406,7 +404,7 @@ export async function GET(request: NextRequest) {
 
     console.log('\n🎯 SENIOR AZURE DOCUMENT INTELLIGENCE DEVELOPER BREAKDOWN:');
     console.log('═════════════════════════════════════════════════════════════');
-    mathematicalBreakdown.calculationSteps.forEach(step => {
+    mathematicalBreakdown.calculationSteps.forEach((step: string) => {
       console.log(`  ${step}`);
     });
     console.log('═════════════════════════════════════════════════════════════');
