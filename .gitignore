@@ -1,0 +1,5 @@
+# TypeScript build cache
+tsconfig.tsbuildinfo
+
+# Next.js build cache
+.next/
